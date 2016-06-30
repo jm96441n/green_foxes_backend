@@ -28,6 +28,7 @@ namespace Webdev.TeamFoxesGreen.App
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -36,6 +37,9 @@ namespace Webdev.TeamFoxesGreen.App
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            //configure cors
+            app.UseCors(builder=>builder.WithOrigins("*"));
 
             //allow default document - default.htm(l), index.htm(l)
             app.UseDefaultFiles();
