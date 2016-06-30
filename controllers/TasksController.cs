@@ -34,5 +34,30 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             return new ObjectResult(task);
         }
         
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id){
+            if (id <= 0) return BadRequest();
+
+            var task = _tasks.FirstOrDefault(t=>.Id==id);
+
+            if (task == null) return NotFound();
+
+            _tasks.Remove(task);
+
+            return _tasks;
+        }
+
+        [HttpPost("{newTask}")]
+        public IActionResult Post(string[] newTask){
+            var id = (_tasks[_tasks.Count - 1]).id + 1;
+
+            var taskToAdd = new Task { id = id, Title = newTask.title, Description = newTask.description, Priority = newTask.priority, Completed = false};
+
+            _tasks.Add(taskToAdd);
+
+            return _tasks;
+
+        }
+        
     }
 }
