@@ -36,11 +36,11 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
 
         [HttpPost]
         public void Create([FromBody]Task data){
-            var id = (_tasks[_tasks.Count - 1]).id + 1;
+            var id = (_tasks[_tasks.Count - 1]).Id + 1;
 
-            var taskToAdd = new Task { id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
+            var taskToAdd = new Task { Id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
 
-            _tasks.Add(Task taskToAdd);
+            _tasks.Add(taskToAdd);
 
         }
         
@@ -50,7 +50,11 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         {
             if(id <= 0 || id == null) return BadRequest();
             
-            _tasks[id] = task;
+            var taskToUpdate = _tasks.FirstOrDefault(t=> t.Id == id);
+
+            taskToUpdate.Description = task.Description;
+            taskToUpdate.Priority = task.Priority;
+            taskToUpdate.Completed = task.Completed;
 
             return new NoContentResult();
         }
