@@ -33,32 +33,40 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             //return the matching task
             return new ObjectResult(task);
         }
-        
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id){
-            if (id <= 0) return BadRequest();
 
-            var task = _tasks.FirstOrDefault(t=>.Id==id);
+        [HttpPost]
+        public void Create([FromBody]Task data){
+            var id = (_tasks[_tasks.Count - 1]).id + 1;
+
+            var taskToAdd = new Task { id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
+
+            _tasks.Add(Task taskToAdd);
+
+        }
+        
+        //Edit action for task listing
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] Task task)
+        {
+            if(id <= 0 || id == null) return BadRequest();
+            
+            _tasks[id] = task;
+
+            return new NoContentResult();
+        }
+
+
+        [HttpDelete("{id}")]
+        public void Delete(int id){
+            if (id <= 0 || id == null) return BadRequest();
+
+            var task = _tasks.FirstOrDefault(t=>t.Id==id);
 
             if (task == null) return NotFound();
 
             _tasks.Remove(task);
 
-            return _tasks;
         }
 
-        [HttpPost]
-        public void Post([FromBody]Task data){
-            var id = (_tasks[_tasks.Count - 1]).id + 1;
-
-            var taskToAdd = new Task { id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
-
-            _tasks.Add(taskToAdd);
-
-            return _tasks;
-
-        }
-
-        
     }
 }
