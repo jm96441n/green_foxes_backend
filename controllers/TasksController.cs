@@ -38,7 +38,7 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         public void Create([FromBody]Task data){
             var id = (_tasks[_tasks.Count - 1]).Id + 1;
 
-            var taskToAdd = new Task { Id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
+            var taskToAdd = new Task { Id = id, Title = data.Title, Description = data.Description, Priority = data.Priority, Completed = false};
 
             _tasks.Add(taskToAdd);
 
@@ -48,7 +48,7 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] Task task)
         {
-            if(id <= 0 || id == null) return BadRequest();
+            if(id <= 0) return BadRequest();
             
             var taskToUpdate = _tasks.FirstOrDefault(t=> t.Id == id);
 
@@ -61,8 +61,8 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
 
 
         [HttpDelete("{id}")]
-        public void Delete(int id){
-            if (id <= 0 || id == null) return BadRequest();
+        public IActionResult Delete(int id){
+            if (id <= 0) return BadRequest();
 
             var task = _tasks.FirstOrDefault(t=>t.Id==id);
 
@@ -70,6 +70,7 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
 
             _tasks.Remove(task);
 
+            return new NoContentResult();
         }
 
     }
