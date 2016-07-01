@@ -47,17 +47,18 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             return _tasks;
         }
 
-        [HttpPost("{newTask}")]
-        public IActionResult Post(string[] newTask){
+        [HttpPost]
+        public void Post([FromBody]Task data){
             var id = (_tasks[_tasks.Count - 1]).id + 1;
 
-            var taskToAdd = new Task { id = id, Title = newTask.title, Description = newTask.description, Priority = newTask.priority, Completed = false};
+            var taskToAdd = new Task { id = id, Title = data.title, Description = data.description, Priority = data.priority, Completed = false};
 
             _tasks.Add(taskToAdd);
 
             return _tasks;
 
         }
+
         
     }
 }
