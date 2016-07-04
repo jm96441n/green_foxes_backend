@@ -48,7 +48,9 @@ namespace Webdev.TeamFoxesGreen.App
             loggerFactory.AddDebug();
 
             //configure cors
-            app.UseCors(builder=>builder.WithOrigins("*"));
+            app.UseCors(builder=>
+                builder.AllowAnyOrigin().AllowAnyMethod()
+            );
 
             //allow default document - default.htm(l), index.htm(l)
             app.UseDefaultFiles();
