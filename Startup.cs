@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Webdev.TeamFoxesGreen.App.Data;
 
 namespace Webdev.TeamFoxesGreen.App
 {
@@ -27,6 +29,13 @@ namespace Webdev.TeamFoxesGreen.App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //configure db context 
+            services.AddDbContext<GreenFoxesDbContext>(options =>
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("GreenFoxesDatabase"), 
+                    b => b.MigrationsAssembly("green_foxes_backend"))
+            );
+        
             // Add framework services.
             services.AddCors();
             services.AddMvc();
