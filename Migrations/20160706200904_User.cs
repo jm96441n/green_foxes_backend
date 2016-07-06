@@ -14,7 +14,7 @@ namespace green_foxes_backend.Migrations
                 {
                     Id = table.Column<int>(nullable: false).Annotation("Npgsql:ValueGeneratorOnAdd", true),
                     Username = table.Column<string>(nullable: false)
-                }
+                },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
