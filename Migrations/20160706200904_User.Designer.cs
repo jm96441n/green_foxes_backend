@@ -8,9 +8,10 @@ using Webdev.TeamFoxesGreen.App.Data;
 namespace green_foxes_backend.Migrations
 {
     [DbContext(typeof(GreenFoxesDbContext))]
-    partial class GreenFoxesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160706200904_User")]
+    partial class User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
