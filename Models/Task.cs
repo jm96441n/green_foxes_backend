@@ -6,7 +6,6 @@ namespace Webdev.TeamFoxesGreen.App.Models
         public string Description {get;set;}
         public TaskPriority Priority {get;set;}
         public bool Completed {get;set;}
-
         public int User_Id {get;set;}
     }
 
