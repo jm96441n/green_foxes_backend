@@ -28,6 +28,8 @@ namespace green_foxes_backend.Migrations
                     b.Property<int>("Priority");
 
                     b.Property<string>("Title");
+                    
+                    b.Property<int>("User_Id");
 
                     b.HasKey("Id");
 
