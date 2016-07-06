@@ -34,6 +34,16 @@ namespace green_foxes_backend.Migrations
 
                     b.ToTable("Tasks");
                 });
+            modelBuilder.Entity("Webdev.TeamFoxesGreen.App.Models.User", b =>
+                {
+                    b.Property<int>("Id").ValueGeneratedOnAdd();
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
         }
     }
 }
