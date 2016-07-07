@@ -2,21 +2,29 @@ using Webdev.TeamFoxesGreen.App.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using Webdev.TeamFoxesGreen.App.Data;
+using System.Net;
+using System.Net.Http;
 
 namespace Webdev.TeamFoxesGreen.App.Controllers
 {
     [Route("api/[controller]")]
     public class TasksController : Controller {
 
-        private List<Task> _tasks =new List<Task>{
-                new Task { Id = 1, Title = "Walk the dog", Description="Stay out of the creek", Priority=TaskPriority.Low, Completed = false},
-                new Task { Id = 2, Title = "Accept commendations", Description="For service above and beyond", Priority=TaskPriority.Low, Completed = false},
-                new Task { Id = 3, Title = "Perform song/dance routine", Description="Uhn tiss", Priority=TaskPriority.Low, Completed = false}
-            }; 
+        private readonly GreenFoxesDbContext _db;
+        public TasksController(GreenFoxesDbContext db){
+            _db = db;
+        }
+        
+        // private List<Task> _tasks =new List<Task>{
+        //         new Task { Id = 1, Title = "Walk the dog", Description="Stay out of the creek", Priority=TaskPriority.Low, Completed = false},
+        //         new Task { Id = 2, Title = "Accept commendations", Description="For service above and beyond", Priority=TaskPriority.Low, Completed = false},
+        //         new Task { Id = 3, Title = "Perform song/dance routine", Description="Uhn tiss", Priority=TaskPriority.Low, Completed = false}
+        //     }; 
 
         [HttpGet]
         public IEnumerable<Task> Get(){
-            return _tasks;
+            return _db.Tasks.AsEnumerable();
         }
 
         [HttpGet("{id}")]
@@ -25,7 +33,7 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             if (id <= 0) return BadRequest();
 
             //find the task in our static collection
-            var task = _tasks.FirstOrDefault(t=>t.Id==id);
+            var task = _db.Tasks.FirstOrDefault(t=>t.Id==id);
 
             //early return if we can't find a task
             if (task==null) return NotFound();
@@ -35,13 +43,21 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         }
 
         [HttpPost]
-        public void Create([FromBody]Task data){
-            var id = (_tasks[_tasks.Count - 1]).Id + 1;
+        public IActionResult Create([FromBody]NewTaskViewModel data){
 
-            var taskToAdd = new Task { Id = id, Title = data.Title, Description = data.Description, Priority = data.Priority, Completed = false};
+            //return an error if our model is invalid
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            _tasks.Add(taskToAdd);
+            //add task to the database
+            _db.Tasks.Add(new Task {
+                Title = data.Title,
+                Description = data.Description,
+                Priority = data.Priority
+            });
 
+            _db.SaveChanges();
+
+            return Ok();
         }
         
         //Edit action for task listing
@@ -50,13 +66,18 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         {
             if(id <= 0) return BadRequest();
             
-            var taskToUpdate = _tasks.FirstOrDefault(t=> t.Id == id);
+            var taskToUpdate = _db.Tasks.FirstOrDefault(t=> t.Id == id);
+
+            if (taskToUpdate == null) return NotFound();
 
             taskToUpdate.Description = task.Description;
             taskToUpdate.Priority = task.Priority;
             taskToUpdate.Completed = task.Completed;
 
-            return new NoContentResult();
+            //commit changes to database
+            _db.SaveChanges();
+
+            return Ok();
         }
 
 
@@ -64,13 +85,13 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         public IActionResult Delete(int id){
             if (id <= 0) return BadRequest();
 
-            var task = _tasks.FirstOrDefault(t=>t.Id==id);
+            var task = _db.Tasks.FirstOrDefault(t=>t.Id==id);
 
             if (task == null) return NotFound();
 
-            _tasks.Remove(task);
+            _db.Tasks.Remove(task);
 
-            return new NoContentResult();
+            return Ok();
         }
 
     }

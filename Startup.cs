@@ -47,11 +47,6 @@ namespace Webdev.TeamFoxesGreen.App
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //configure cors
-            app.UseCors(builder=>
-                builder.AllowAnyOrigin().AllowAnyMethod()
-            );
-
             //allow default document - default.htm(l), index.htm(l)
             app.UseDefaultFiles();
 
@@ -60,6 +55,12 @@ namespace Webdev.TeamFoxesGreen.App
 
             //configure mvc
             app.UseMvc();
+
+            //configure cors
+            app.UseCors(builder=>
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
+            
         }
     }
 }
