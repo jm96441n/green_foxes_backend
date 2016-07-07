@@ -37,7 +37,7 @@ namespace Webdev.TeamFoxesGreen.App
             );
         
             // Add framework services.
-            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()));
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -57,7 +57,9 @@ namespace Webdev.TeamFoxesGreen.App
             app.UseMvc();
 
             //configure cors
-            app.UseCors("AllowAll");
+            app.UseCors(builder=>
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
             
         }
     }
