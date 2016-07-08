@@ -23,6 +23,12 @@ namespace green_foxes_backend.Migrations
 
                     b.Property<string>("Username");
 
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("Email");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");

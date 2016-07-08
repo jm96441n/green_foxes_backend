@@ -13,7 +13,11 @@ namespace green_foxes_backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false).Annotation("Npgsql:ValueGeneratorOnAdd", true),
-                    Username = table.Column<string>(nullable: false)
+                    Username = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false)
+
                 },
                 constraints: table =>
                 {

@@ -25,7 +25,10 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             if (id <= 0) return BadRequest();
 
             //find the task in our static collection
-            var task = _tasks.FirstOrDefault(t=>t.Id==id);
+            //var task = _tasks.FirstOrDefault(t=>t.Id==id);
+            
+            //using db
+            Task task = db.Tasks.Find(id)
 
             //early return if we can't find a task
             if (task==null) return NotFound();
@@ -38,9 +41,10 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         public void Create([FromBody]Task data){
             var id = (_tasks[_tasks.Count - 1]).Id + 1;
 
-            var taskToAdd = new Task { Id = id, Title = data.Title, Description = data.Description, Priority = data.Priority, Completed = false};
+            Task taskToAdd = new Task { Id = id, Title = data.Title, Description = data.Description, Priority = data.Priority, Completed = false};
 
-            _tasks.Add(taskToAdd);
+            db.Tasks.Add(taskToAdd);
+            db.SaveChanges();
 
         }
         
@@ -50,11 +54,16 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         {
             if(id <= 0) return BadRequest();
             
-            var taskToUpdate = _tasks.FirstOrDefault(t=> t.Id == id);
+            Task taskToUpdate = db.Tasks.Find(id);
 
-            taskToUpdate.Description = task.Description;
-            taskToUpdate.Priority = task.Priority;
-            taskToUpdate.Completed = task.Completed;
+            if(TryUpdateModel(taskToUpdate, '', new string[] {"Title","Description","Priority","Completed"}))
+            {
+                db.SaveChanges();
+            }
+
+            // taskToUpdate.Description = task.Description;
+            // taskToUpdate.Priority = task.Priority;
+            // taskToUpdate.Completed = task.Completed;
 
             return new NoContentResult();
         }
@@ -64,11 +73,12 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
         public IActionResult Delete(int id){
             if (id <= 0) return BadRequest();
 
-            var task = _tasks.FirstOrDefault(t=>t.Id==id);
+            Task task = db.Tasks.Find(id);
 
             if (task == null) return NotFound();
 
-            _tasks.Remove(task);
+            db.Tasks.Remove(task);
+            db.SaveChanges();
 
             return new NoContentResult();
         }

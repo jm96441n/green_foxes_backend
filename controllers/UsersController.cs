@@ -13,7 +13,9 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             public IActionResult Get(int id){
                 if (id <= 0) return BadRequest();
 
-                var currentUser = _users.FirstOrDefault(u=> u.Id == id );
+                //var currentUser = _users.FirstOrDefault(u=> u.Id == id );
+
+                var currentUser = db.Users.Find(id);
 
                 if (currentUser == null) return NotFound();
 
@@ -22,7 +24,8 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
 
             [HttpPost]
             public void Create([FromBody]User data){
-                var newUser = new User {Username = data.Username};
+                User newUser = new User {Username = data.Username, FirstName = data.FirstName, LastName = data.LastName, Email = data.Email};
+                db.Users.Add(newUser);
 
             }
 
@@ -31,9 +34,12 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             {
                 if (id <= 0) return BadRequest();
 
-                var userToUpdate = _users.FirstOrDefault(u=> u.Id == id);
+                User userToUpdate = db.Users.Find(id);
 
-                userToUpdate.Username = user.Username;
+                if(TryUpdateModel(userToUpdate,'',new string[] {"Username","FirstName","LastName", "Email"}))
+                {
+                    db.SaveChanges();
+                }
 
                 return new NoContentResult();
             }
@@ -42,11 +48,12 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
             public IActionResult Delete(int id){
                 if (id <= 0) return BadRequest();
 
-                var userToDelete = _users.FirstOrDefault(u => u.Id == id);
+                User userToDelete = db.Users.Find(id);
                 
                 if (userToDelete == null) return NotFound();
 
-                _users.Remove(userToDelete);
+               db.Users.Remove(userToDelete);
+               db.SaveChanges();
 
                 return new NoContentResult();
             }
