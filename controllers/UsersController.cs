@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Webdev.TeamFoxesGreen.App.Controllers
 {
-        [Route("api/[controller]")]
+        [Route("api/users/[controller]")]
         public class UsersController : Controller {
             
             [HttpGet("{id}")]
