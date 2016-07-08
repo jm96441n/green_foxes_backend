@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Webdev.TeamFoxesGreen.App.Controllers
 {
-    [Route("api/tasks/[controller]")]
+    [Route("api/[controller]")]
     public class TasksController : Controller {
 
         private List<Task> _tasks =new List<Task>{
