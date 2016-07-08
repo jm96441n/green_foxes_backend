@@ -8,32 +8,24 @@ using Webdev.TeamFoxesGreen.App.Data;
 namespace green_foxes_backend.Migrations
 {
     [DbContext(typeof(GreenFoxesDbContext))]
-    [Migration("20160704213120_Initial")]
-    partial class Initial
+    [Migration("20160706200904_User")]
+    partial class User
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
 
-            modelBuilder.Entity("Webdev.TeamFoxesGreen.App.Models.Task", b =>
+            modelBuilder.Entity("Webdev.TeamFoxesGreen.App.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Completed");
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("Priority");
-
-                    b.Property<string>("Title");
-                    
-                    b.Property<int>("User_Id");
+                    b.Property<string>("Username");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Users");
                 });
         }
     }
