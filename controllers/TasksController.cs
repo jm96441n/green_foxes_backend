@@ -70,6 +70,7 @@ namespace Webdev.TeamFoxesGreen.App.Controllers
 
             if (taskToUpdate == null) return NotFound();
 
+            taskToUpdate.Title = task.Title
             taskToUpdate.Description = task.Description;
             taskToUpdate.Priority = task.Priority;
             taskToUpdate.Completed = task.Completed;
